@@ -1,0 +1,23 @@
+---
+description: Route AI-SDLC directives to the framework boot loader at .ai-sdlc/ENTRY.md
+globs:
+alwaysApply: true
+---
+
+# AI-SDLC routing rule
+
+When the user's message contains any of:
+
+- The canonical phrase: `Run AI-SDLC.`
+- Natural variants such as: "use the sdlc orchestrator", "kick off ai-sdlc", "start ai-sdlc on this", "run the sdlc framework"
+- Any directive that explicitly references `.ai-sdlc/`
+
+…then immediately:
+
+1. Read `.ai-sdlc/ENTRY.md` and follow its instructions exactly.
+2. Do **not** improvise an SDLC of your own. The framework defines phases, artifacts, decision points, access checks, and update rules.
+3. Honor the principles in `.ai-sdlc/PRINCIPLES.md` — especially the hard-block on cross-module access in phase 02 and the prohibition on deleting framework content.
+4. Prefer tool use over guessing. See `.ai-sdlc/tools/well-known-tools.md` for the catalog.
+5. Write phase artifacts to `.ai-sdlc/sessions/<id>/` and update `manifest.yaml` as the source of truth.
+
+If `.ai-sdlc/ENTRY.md` does not exist, tell the user the framework isn't installed and stop.

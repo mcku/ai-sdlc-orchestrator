@@ -1,0 +1,54 @@
+session_id: 2026-05-04-example-checkout-bug
+created_by: claude-code
+created_at: 2026-05-04T09:00:00Z
+request_summary: >
+  Checkout fails for users with saved cards when the cart contains a subscription item.
+  Reported by support, ticket SUP-1842.
+type: bug
+
+current_phase: 03-planning
+status: in_progress
+
+phases:
+  00-intake:
+    status: done
+    artifact: 00-intake.md
+    completed_at: 2026-05-04T09:05:00Z
+  01-analysis:
+    status: done
+    artifact: 01-analysis.md
+    completed_at: 2026-05-04T09:25:00Z
+  02-scoping:
+    status: done
+    artifact: 02-scoping.md
+    completed_at: 2026-05-04T09:50:00Z
+  03-planning:
+    status: active
+    artifact: 03-planning.md
+  04-development:
+    status: pending
+  05-qa:
+    status: pending
+  06-security:
+    status: pending
+  07-delivery:
+    status: pending
+  08-retrospective:
+    status: pending
+
+access_requests:
+  - module: payments-service
+    what: read access to src/webhooks.ts
+    why: confirm subscription-renewal event shape before designing checkout fix
+    requested_at: 2026-05-04T09:35:00Z
+    status: granted
+    decided_at: 2026-05-04T09:42:00Z
+    notes: user pulled the repo locally; readable from ../payments-service
+
+decisions:
+  - phase: 02-scoping
+    summary: >
+      Fix is scoped to checkout flow only; subscription renewal logic stays out of scope
+      and will be filed as a separate session if it turns out to be implicated.
+
+proposed_updates: []
