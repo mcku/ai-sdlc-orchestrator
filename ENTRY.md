@@ -18,11 +18,26 @@ Read `PRINCIPLES.md`. These rules override your defaults for this run:
 
 Look for `sessions/<dir>/manifest.yaml` with `status` not equal to `done`.
 
-- If exactly one active session exists → resume it.
-- If none → create `sessions/<YYYY-MM-DD-slug>/manifest.yaml` from the user's request and start at phase 00.
+- If exactly one active session exists → resume it. **Run the version check below before continuing.**
+- If none → create `sessions/<YYYY-MM-DD-slug>/manifest.yaml` from the user's request and start at phase 00. Stamp the manifest with the current framework version (read `VERSION` at the framework root and write its contents into the manifest field `framework_version`).
 - If multiple → ask the user which to resume.
 
 The slug is a 2–4 word kebab summary of the request (e.g. `checkout-bug`, `add-stripe-webhook`).
+
+The canonical manifest shape is `sessions/example/manifest.yaml`. New sessions must include at minimum: `session_id`, `framework_version`, `created_at`, `current_phase`, `status`, `phases.*`, `access_requests` (may be empty), `decisions` (may be empty), `proposed_updates` (may be empty).
+
+### Version check on resume
+
+Compare the manifest's `framework_version` against the current `VERSION`:
+
+- **Equal** → proceed.
+- **Manifest version older, same major (e.g. `0.1.0` vs `0.2.0`)** → safe per the compatibility contract in `UPDATING.md`. Note the upgrade in chat ("Resuming session created under v0.1.0 on framework v0.2.0; new gates apply to future phase runs only.") and proceed.
+- **Manifest version newer than current** → halt. Tell the user the framework was downgraded; instruct them to upgrade `.ai-sdlc/` to at least the manifest's version. Do not proceed until the framework is upgraded or the user explicitly accepts after acknowledging the risk in writing.
+- **Major version differs (manifest's MAJOR < current MAJOR)** → **halt unconditionally**. Per principle 8 and `self-improvement/update-rules.md`, breaking changes never run on existing sessions. Tell the user:
+  > This session was created under framework v`<X.y.z>`, but the framework is now v`<X'.y'.z'>` with a different MAJOR. Breaking changes cannot be applied to existing sessions. Finish this session under the original framework version (see `UPDATING.md` "Finishing an in-flight session under a prior MAJOR" for the pinned-checkout recipe), then upgrade for new sessions.
+  
+  Do **not** offer a "force" or "accept the risk" option. There is none.
+- **`framework_version` missing** (session predates versioning) → backfill it with the current `VERSION` value, note the assumption in chat, and proceed. (Pre-versioning sessions are by definition pre-`0.2.0`; same-major safe.)
 
 ## 4. Run the skill-gap check (only when starting a new session)
 

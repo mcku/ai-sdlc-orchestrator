@@ -7,7 +7,9 @@ Machine-readable map of the framework. The agent uses this instead of scanning d
 - [`ENTRY.md`](ENTRY.md) — agent boot loader; the only file an adapter needs to point at.
 - [`INDEX.md`](INDEX.md) — this file.
 - [`README.md`](README.md) — human-facing install and usage.
+- [`UPDATING.md`](UPDATING.md) — how to move an existing install to a newer version.
 - [`PRINCIPLES.md`](PRINCIPLES.md) — operating rules that override agent defaults.
+- [`VERSION`](VERSION) — current framework version; stamped into every new session manifest.
 - [`install.sh`](install.sh) — adapter installer (auto-detect, symlink, copy fallback, uninstall).
 
 ## Phases (`phases/`)
@@ -26,6 +28,8 @@ Machine-readable map of the framework. The agent uses this instead of scanning d
 
 - [`ask-for-access.md`](playbooks/ask-for-access.md) — how to identify, request, and record cross-module access.
 - [`bugfix-triage.md`](playbooks/bugfix-triage.md) — reproduce → root cause → minimal fix → regression.
+- [`coverage-gate.md`](playbooks/coverage-gate.md) — phase 05 gate: ≥ 80% diff coverage on added/changed code.
+- [`pre-commit-gate.md`](playbooks/pre-commit-gate.md) — phase 05 gate: run `pre-commit run` against the diff after tests pass.
 
 ## Self-improvement (`self-improvement/`)
 

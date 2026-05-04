@@ -47,10 +47,15 @@ The adapter routes to `ENTRY.md`, which boots the agent through the framework: l
 
 Intake → analysis → scoping (with hard-block on cross-module access) → planning → development → QA → security → delivery → retrospective. The retrospective proposes updates to the framework itself, gated by `self-improvement/update-rules.md`.
 
+## Updating
+
+Already have an older `.ai-sdlc/` checked out in your project? See [`UPDATING.md`](UPDATING.md). For symlink-based installs, the update is just `cd .ai-sdlc && git pull`.
+
 ## Key files for humans
 
 - [`PRINCIPLES.md`](PRINCIPLES.md) — what the framework values and why
 - [`INDEX.md`](INDEX.md) — every file and its purpose
+- [`UPDATING.md`](UPDATING.md) — how to update an existing install
 - [`tools/well-known-tools.md`](tools/well-known-tools.md) — MCPs/CLIs you should install for full power
 
 ## Status

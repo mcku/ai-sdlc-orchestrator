@@ -62,7 +62,19 @@ Never paste secrets into chat, files, or commits. If a tool can't fetch a secret
 | Tool | When to reach for it |
 |---|---|
 | Project test runner (`pytest`, `jest`, `go test`, etc.) | Phase 05, every time. |
-| Coverage tool | When the change touches risk-sensitive code; not required for every fix. |
+| `pre-commit` (https://pre-commit.com/) | Phase 05 pre-commit gate. Run `pre-commit run` against the diff after tests/coverage pass. See `playbooks/pre-commit-gate.md`. |
+
+## Coverage (phase 05 gate, ≥ 80% on diff)
+
+| Tool | When to reach for it |
+|---|---|
+| `coverage` / `pytest-cov` (Python) | Default Python coverage. Emit cobertura XML for `diff-cover`. |
+| `c8` or `nyc` (JS/TS) | Istanbul-based coverage. Use Vitest/Jest `--coverage` if those runners are in use. |
+| `go test -cover -coverprofile` (Go) | Native Go coverage. Convert to cobertura with `gocover-cobertura` if pairing with `diff-cover`. |
+| `cargo-llvm-cov` / `cargo-tarpaulin` (Rust) | Rust coverage. Emit lcov for `diff-cover`. |
+| JaCoCo (JVM) | Java/Kotlin coverage. XML output is `diff-cover`-compatible. |
+| `simplecov` (Ruby) | Ruby coverage. Pair with `simplecov-cobertura` for `diff-cover`. |
+| **`diff-cover`** | Computes coverage on **changed lines only** (the metric the gate checks) from cobertura/lcov/JaCoCo input. Use across languages — common denominator. See `playbooks/coverage-gate.md`. |
 
 ## Static analysis & security
 

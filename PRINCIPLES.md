@@ -41,3 +41,13 @@ The framework grows monotonically. If a playbook is wrong, edit it (with approva
 ## 7. Vendor-neutral by default
 
 Phases and playbooks are written so any competent agent can execute them with plain Markdown alone. Vendor-specific affordances (Claude Code skills, Cursor rules, Gemini instructions) live in `adapters/` and add ergonomics — they never change behavior. If you find yourself encoding vendor logic into a phase, stop and move it to the adapter.
+
+## 8. Prefer non-breaking changes; breaking changes never run on existing sessions
+
+When phase 08 retrospective proposes a framework update, the agent classifies it as **non-breaking** (additive — new files, new optional manifest fields, new gates within a phase that only apply to future phase runs) or **breaking** (renumbering, removing fields, making optional required, renaming canonical paths, changing the boot path).
+
+- **Default to non-breaking.** It applies cleanly to every existing session. No coordination cost.
+- **Choose breaking only when the burden/cost of the workaround clearly outweighs the disruption.** The agent writes an explicit cost-benefit rationale in the proposal; the user approves.
+- **Hard runtime rule:** a breaking change must not be applied to a session created under a prior MAJOR. The agent refuses to run a breaking-change framework version against an older session — no "force" flag, no override. Old sessions finish on the framework version they started under (see `UPDATING.md` for the pinned-checkout recipe).
+
+This is a one-way ratchet: once chosen, breaking changes are absorbed at a MAJOR bump and the contract for `0.x → 1.0` (or beyond) is documented in `UPDATING.md`.

@@ -9,7 +9,7 @@ Capture and normalize the raw user request into a session artifact.
 
 ## Outputs
 
-- `sessions/<id>/manifest.yaml` — created if not present; see schema in `ENTRY.md` step 3.
+- `sessions/<id>/manifest.yaml` — created if not present. Canonical shape: `sessions/example/manifest.yaml`. Required fields documented in `ENTRY.md` step 3. **Always stamp `framework_version` from the framework root `VERSION` file** so future agents can detect compat at resume time.
 - `sessions/<id>/00-intake.md` — normalized statement of the work.
 
 ## Decision points

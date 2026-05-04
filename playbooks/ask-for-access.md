@@ -13,15 +13,17 @@ Used by phase 02 (scoping) when work needs access to a module/repo/system the ag
 
 1. **Identify the access shortfall precisely.** "Need access to `payments-service`" is too vague. "Need read access to `payments-service/src/webhooks.ts` to confirm the event schema" is actionable.
 
-2. **Record the request in `manifest.yaml`** under `access_requests`:
+2. **Record the request in `manifest.yaml`** under `access_requests`. Canonical fields (matches `sessions/example/manifest.yaml`):
 
    ```yaml
    access_requests:
-     - module: payments-service
-       what: read access to src/webhooks.ts to confirm event schema
-       why: need to know which events fire for refunds before designing handler
-       requested_at: 2026-05-04T10:30:00Z
-       status: pending
+     - module: payments-service                # required: short identifier
+       what: read access to src/webhooks.ts    # required: specific scope
+       why: confirm event schema before design # required: motivation
+       requested_at: 2026-05-04T10:30:00Z      # required: ISO-8601
+       status: pending                         # required: pending | granted | denied
+       decided_at: ...                         # added on grant/deny
+       notes: ...                              # optional: extra context
    ```
 
 3. **Ask the user once, clearly.** Combine all pending requests into a single message if possible:
