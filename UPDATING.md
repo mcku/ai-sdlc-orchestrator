@@ -123,6 +123,22 @@ Phase 05 now runs `pre-commit run` against the diff after tests and coverage pas
 - If any of those are missing, the gate is skipped with a recorded reason — it does not block. But the retrospective will surface the gap.
 - To enable it: `pip install pre-commit` (or `pipx install pre-commit`), add a `.pre-commit-config.yaml`, and run `pre-commit install`.
 
+### Per-project gate config (added in 0.3.0)
+
+Gates can now be **disabled** or set to **manual-trigger** per project via `.ai-sdlc.yaml` at the project root. See `config.example.yaml` for the full schema. Defaults are unchanged (every gate enabled), so existing projects without a config behave identically — non-breaking.
+
+```yaml
+# .ai-sdlc.yaml
+gates:
+  coverage: { enabled: manual, threshold: 80 }   # only runs when user asks
+  pre_commit: { enabled: false }                  # skipped entirely
+  ui_test: { enabled: true }                      # default
+```
+
+### Coverage gate language-awareness (changed in 0.3.0)
+
+Earlier versions of `playbooks/coverage-gate.md` recommended `diff-cover` (a Python tool) as the cross-language default. That caused `diff-cover` to be invoked in non-Python repos (Go, Rust, etc.), pulling Python in as a transitive requirement. Fixed: the playbook now detects the project language and prefers native diff-coverage tooling. `diff-cover` is only used when Python is already a project dependency. Non-breaking — same gate, same threshold, just a smarter tool selection.
+
 ### Settings allowlist (Claude Code only)
 
 If you previously merged `adapters/claude-code/settings.example.json` into `.claude/settings.json`, re-diff after pulling to see if new safe permissions were added:

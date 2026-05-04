@@ -2,11 +2,23 @@
 
 Used at the end of phase 05 (QA), after tests and coverage pass. Runs the project's [`pre-commit`](https://pre-commit.com/) hooks against the changed files. Catches the lint/format/security checks the project has already standardized on, before delivery.
 
+## Configuration (read first)
+
+Before running, check the project's `.ai-sdlc.yaml` `gates.pre_commit` section:
+
+- `enabled: true` (default) → run the gate.
+- `enabled: false` → skip entirely; record `skipped (disabled by .ai-sdlc.yaml)` and continue.
+- `enabled: manual` → do not auto-run; only run when the user explicitly asks. Record `skipped (manual mode; not invoked this run)`.
+
+This gate also auto-skips (regardless of config) when its prerequisites aren't met — see "Assumptions" below.
+
 ## Assumptions
 
 - Python is installed.
 - `pre-commit` is installed (`pip install pre-commit`, `pipx install pre-commit`, or via the project's dev-dependency manifest).
 - The project has a `.pre-commit-config.yaml` at the repo root.
+
+If any of these is missing, the gate auto-skips with the specific reason recorded in `05-qa.md`. Do **not** silently install `pre-commit` or Python — ask the user first.
 
 ## Steps
 

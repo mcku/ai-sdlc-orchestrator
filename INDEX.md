@@ -10,6 +10,7 @@ Machine-readable map of the framework. The agent uses this instead of scanning d
 - [`UPDATING.md`](UPDATING.md) — how to move an existing install to a newer version.
 - [`PRINCIPLES.md`](PRINCIPLES.md) — operating rules that override agent defaults.
 - [`VERSION`](VERSION) — current framework version; stamped into every new session manifest.
+- [`config.example.yaml`](config.example.yaml) — per-project config template; copy to `.ai-sdlc.yaml` at project root to disable or manually-trigger gates.
 - [`install.sh`](install.sh) — adapter installer (auto-detect, symlink, copy fallback, uninstall).
 
 ## Phases (`phases/`)

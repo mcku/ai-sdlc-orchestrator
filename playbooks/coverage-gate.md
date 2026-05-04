@@ -1,68 +1,78 @@
 # Playbook — Coverage gate
 
-Used by phase 05 (QA). Verifies that **added/changed code** is covered by unit tests at ≥ 80%. Whole-codebase coverage is **not** the metric — diff coverage is. A passing build that drops a 20-line uncovered helper into the codebase still fails this gate.
+Used by phase 05 (QA). Verifies that **added/changed code** is covered by unit tests at the project's configured threshold (default ≥ 80%). Whole-codebase coverage is **not** the metric — diff coverage is.
 
-## Threshold
+## Configuration (read first)
 
-- **≥ 80% line coverage on added/changed lines** in this session's diff.
-- Tested-elsewhere code (e.g., type definitions, constants, generated files) may be excluded with explicit notes in `05-qa.md`.
+Before doing anything else, read the project's `.ai-sdlc.yaml` (at the project root, alongside `.ai-sdlc/`). Honor its `gates.coverage` section:
 
-## Tool selection (free / open source)
+- `enabled: true` (default) → run the gate as a hard exit-criterion.
+- `enabled: false` → skip entirely. Record `skipped (disabled by .ai-sdlc.yaml)` in `05-qa.md` and continue.
+- `enabled: manual` → do **not** auto-run. The agent runs it only when the user explicitly asks ("run the coverage gate"). When skipped, record `skipped (manual mode; not invoked this run)`.
+- `threshold: <N>` → use `<N>` instead of 80.
 
-Pick the one that matches the project. Install if needed and record the choice in `05-qa.md`.
+If `.ai-sdlc.yaml` doesn't exist, defaults apply (enabled, threshold 80).
 
-| Language / runtime | Coverage tool | Diff coverage tool |
-|---|---|---|
-| Python | `coverage` / `pytest-cov` | [`diff-cover`](https://pypi.org/project/diff-cover/) |
-| JavaScript / TypeScript | `c8` or `nyc` (Istanbul); Vitest/Jest `--coverage` | `diff-cover` (works on cobertura/lcov output) |
-| Go | `go test -cover -coverprofile=cover.out` | `diff-cover` on cobertura-converted output, or `gocover-cobertura` + `diff-cover` |
-| Rust | `cargo-llvm-cov` (or `cargo-tarpaulin`) | `diff-cover` on lcov output |
-| Java / Kotlin | JaCoCo | `diff-cover` on JaCoCo XML |
-| Ruby | `simplecov` | `simplecov-cobertura` + `diff-cover` |
+## Step 1 — Detect the project language and existing tooling
 
-`diff-cover` is the common denominator: it consumes a coverage report (cobertura XML, lcov, or JaCoCo) plus a git diff, and outputs the percentage covered on changed lines.
+**Do this before suggesting any tool.** The wrong default — running a Python tool in a Go repo — is worse than no gate.
 
-## Steps
+1. Detect the primary language by looking at the project root:
+   - `go.mod` → Go
+   - `package.json` → JS/TS (also check for `vitest.config.*`, `jest.config.*`)
+   - `pyproject.toml` / `setup.py` / `requirements*.txt` → Python
+   - `Cargo.toml` → Rust
+   - `pom.xml` / `build.gradle*` → JVM (Java/Kotlin/Scala)
+   - `Gemfile` → Ruby
+   - mixed/none → ask the user before proceeding
 
-1. **Identify the project's existing coverage tooling** (config files, CI scripts). If something is already configured, use it. Don't add a parallel toolchain.
+2. Look for existing coverage tooling: scan CI configs, `Makefile`, `package.json` scripts, `pyproject.toml` `[tool.coverage]` sections, etc. **If something is already configured, use that.** Don't add a parallel toolchain.
 
-2. **If no coverage tooling exists**, install the appropriate one above and add minimal config:
-   - Generate machine-readable output (cobertura XML or lcov is most portable).
-   - Output path: `.coverage.xml` or `coverage/lcov.info` (don't commit; add to `.gitignore` if not already).
-   - Ask the user before adding new dev dependencies.
+## Step 2 — Pick a coverage tool (language-first)
 
-3. **Run the unit test suite with coverage enabled.** Capture the report.
+Prefer the language's native coverage tooling. Only reach for `diff-cover` when Python is already present in the project — `diff-cover` is a Python tool and pulling Python into a non-Python repo is friction the gate doesn't justify.
 
-4. **Compute diff coverage** against the merge base of the work branch:
+| Language | Native coverage | Native diff-coverage option | Fallback (only if Python is already a project dep) |
+|---|---|---|---|
+| Python | `coverage` / `pytest-cov` | `diff-cover` (already Python) | — |
+| JS / TS | `c8`, `nyc`, Vitest/Jest `--coverage` | [`monocart`](https://github.com/cenfun/monocart-coverage-reports) v2+ supports diff-coverage; or compute against `git diff` from lcov manually | `diff-cover` over lcov |
+| Go | `go test -cover -coverprofile` | Compute diff coverage from the coverprofile + `git diff --unified=0`. A small awk/jq script suffices; do **not** install Python for this. | `gocover-cobertura` + `diff-cover` (only if project already uses Python tooling, e.g. ML/data tooling alongside Go) |
+| Rust | `cargo-llvm-cov` (`--lcov`) or `cargo-tarpaulin` | Compute from lcov + `git diff` | `diff-cover` over lcov (only if Python is already present) |
+| Java / Kotlin | JaCoCo | [`diff-line-coverage` Gradle plugin](https://plugins.gradle.org/) or compute from JaCoCo XML | `diff-cover` over JaCoCo XML (only if Python is already present) |
+| Ruby | `simplecov` | `simplecov-cobertura` + small ruby script over `git diff` | `diff-cover` (only if Python is already present) |
 
-   ```sh
-   diff-cover .coverage.xml --compare-branch=origin/main --fail-under=80
-   ```
+**Rule of thumb:** if the repo's lockfile / dependency manifest doesn't already include Python, do **not** install Python or `diff-cover`. Compute diff coverage natively or ask the user how to proceed.
 
-   (Adjust paths and base branch to match the project. Use `git merge-base` if `origin/main` isn't right.)
+## Step 3 — Run
 
-5. **If < 80%:**
-   - Identify uncovered added lines (the report lists them).
-   - Add unit tests for the meaningful uncovered branches.
-   - Re-run.
-   - **Do not** game the metric by adding tests that exercise without asserting. The threshold is a floor, not a finish line.
+1. Run unit tests with coverage enabled, emit a machine-readable report (cobertura XML or lcov).
+2. Compute diff coverage on lines added/changed since the merge base of the work branch (`git merge-base HEAD origin/main` — or whatever base branch the project uses).
+3. If a chunk genuinely shouldn't be unit-tested (UI glue, IO at boundary covered by integration tests only), exclude it via the tool's exclusion config and document why in `05-qa.md`.
 
-6. **If a chunk genuinely shouldn't be unit-tested** (UI glue, framework boilerplate, IO at trust boundary covered only by integration tests), document why in `05-qa.md` and exclude it explicitly via the tool's exclusion config — not by lowering the threshold.
+## Step 4 — Decide
 
-7. **Record results** in `05-qa.md`:
-   - Tool used
-   - Diff coverage percentage
-   - Total added/changed lines, total covered lines
-   - Any explicit exclusions and rationale
+- **≥ threshold** → record results, advance.
+- **< threshold** → identify uncovered added lines, add tests for the meaningful uncovered branches, re-run. Don't game the metric (assertion-less tests, broad excludes, threshold lowering).
+
+## Step 5 — Record
+
+In `05-qa.md`, record:
+
+- Detected language and tool selected
+- Whether the gate ran, was disabled, or was in manual-mode-not-invoked
+- Threshold used and diff coverage percentage achieved
+- Total added/changed lines, total covered lines
+- Any explicit exclusions and rationale
 
 ## Exit criteria
 
-- Diff coverage ≥ 80% (or all gaps explicitly justified and approved).
-- Coverage report path noted in `05-qa.md`.
+- Diff coverage ≥ threshold (when `enabled: true`), or
+- Gate skipped per `.ai-sdlc.yaml` (`enabled: false` or `manual` and not invoked) with reason recorded.
 
 ## Anti-patterns
 
-- Reporting whole-codebase coverage instead of diff coverage. Easy to game; misses the point.
-- Adding tests that achieve coverage without making assertions.
-- Excluding files just to clear the threshold. Excludes need a stated reason.
-- Lowering the threshold for "this one PR." If 80% isn't right for the project, raise the issue at retrospective; don't bypass mid-session.
+- Pulling Python into a non-Python repo just to run `diff-cover`. Use language-native tooling.
+- Reporting whole-codebase coverage instead of diff coverage.
+- Tests that achieve coverage without making assertions.
+- Lowering the threshold for "this one PR." If the threshold is wrong for the project, raise it at retrospective; don't bypass mid-session.
+- Excluding files just to clear the bar. Excludes need a stated reason.

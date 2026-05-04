@@ -14,6 +14,12 @@ Read `PRINCIPLES.md`. These rules override your defaults for this run:
 - **File-first state** — every decision is written to disk before you act on it.
 - **Hard-block on access** — if a module isn't accessible and you need it, stop and ask.
 
+## 2.5 Read the project config (if present)
+
+Look for `.ai-sdlc.yaml` at the project root (sibling of `.ai-sdlc/`). It is OPTIONAL — when absent, every gate defaults to `enabled: true`. When present, honor each `gates.<name>.enabled` value (`true` / `false` / `manual`) at the relevant phase. See `config.example.yaml` for the full schema.
+
+Reading the config is cheap (small YAML file); do it once at session start and again before any phase that has gates (currently phase 05).
+
 ## 3. Resolve the active session
 
 Look for `sessions/<dir>/manifest.yaml` with `status` not equal to `done`.

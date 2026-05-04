@@ -1,0 +1,46 @@
+# AI-SDLC project configuration
+#
+# Copy this file to your project root as `.ai-sdlc.yaml` to override defaults
+# for this project. The file is OPTIONAL — without it, every gate defaults to
+# `enabled: true`, matching the pre-`0.3.0` behavior.
+#
+# The agent reads this file at session start (per ENTRY.md step 2.5) and
+# again before any phase that has gates (e.g., phase 05).
+#
+# Each gate accepts one of:
+#   enabled: true     # gate runs as a hard exit-criterion (default)
+#   enabled: false    # gate is skipped entirely; the skip is recorded in the artifact
+#                     # with reason "disabled by .ai-sdlc.yaml"
+#   enabled: manual   # gate does NOT auto-run; the agent never invokes it on its own,
+#                     # but the user may explicitly request it ("run the coverage gate")
+#                     # and the agent will run it on demand.
+
+gates:
+  coverage:
+    enabled: true            # true | false | manual
+    threshold: 80             # diff coverage % required when enabled: true
+    # tool: auto              # auto = pick by detected language (default)
+    #                         # explicit options: pytest-cov, coverage, c8, nyc, jest,
+    #                         # vitest, go-cover, cargo-llvm-cov, jacoco, simplecov, ...
+    # diff_cover: auto        # auto = use diff-cover only when Python is already
+    #                         # available in the project; never force Python install.
+    #                         # explicit: true | false
+
+  pre_commit:
+    enabled: true            # true | false | manual
+    # If pre-commit isn't installed or .pre-commit-config.yaml is missing, the gate
+    # auto-skips regardless of this setting (recorded with reason in the artifact).
+
+  ui_test:
+    enabled: true            # true | false | manual
+    # Auto-skips when the change doesn't touch UI surface.
+
+  security_review:
+    enabled: true            # true | false | manual
+    # Note: disabling phase 06 entirely is strongly discouraged; manual is preferred
+    # if you want it gated on user request.
+
+# Reserved for future use:
+# language:
+#   primary: auto             # auto-detect from go.mod, package.json, pyproject.toml, etc.
+# session_dir: sessions       # override where sessions are written
