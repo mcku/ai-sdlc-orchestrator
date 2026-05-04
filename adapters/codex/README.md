@@ -7,10 +7,18 @@ Placeholder for OpenAI Codex CLI integration. Not a v0 priority; included so the
 From the project root:
 
 ```sh
-cp .ai-sdlc/adapters/codex/AGENTS.md AGENTS.md
+./.ai-sdlc/install.sh codex
 ```
 
-(Exact filename depends on Codex CLI's instruction-loading conventions.)
+This symlinks `AGENTS.md` (project root) → `.ai-sdlc/adapters/codex/AGENTS.md`.
+
+### Manual fallback (no installer)
+
+```sh
+ln -s .ai-sdlc/adapters/codex/AGENTS.md AGENTS.md
+```
+
+Exact filename depends on Codex CLI's instruction-loading conventions; adjust the link target accordingly.
 
 ## How it will work
 

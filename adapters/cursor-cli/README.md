@@ -4,13 +4,22 @@ Wires AI-SDLC into Cursor CLI via a project rule.
 
 ## Install
 
-From the project root (where `.ai-sdlc/` is checked out):
+From the project root:
 
 ```sh
-cp .ai-sdlc/adapters/cursor-cli/sdlc.mdc .cursor/rules/sdlc.mdc
-# or, for older Cursor versions:
-cat .ai-sdlc/adapters/cursor-cli/sdlc.mdc >> .cursorrules
+./.ai-sdlc/install.sh cursor-cli
 ```
+
+This symlinks `.cursor/rules/sdlc.mdc` → `.ai-sdlc/adapters/cursor-cli/sdlc.mdc`. Updates flow automatically via `git pull` in `.ai-sdlc/`.
+
+### Manual fallback (no installer)
+
+```sh
+mkdir -p .cursor/rules
+ln -s ../../.ai-sdlc/adapters/cursor-cli/sdlc.mdc .cursor/rules/sdlc.mdc
+```
+
+For older Cursor versions that read `.cursorrules` instead of `.cursor/rules/`, append the routing text once: `cat .ai-sdlc/adapters/cursor-cli/sdlc.mdc >> .cursorrules`. The installer doesn't manage `.cursorrules` because it's project-owned and may already contain other rules.
 
 ## How it works
 

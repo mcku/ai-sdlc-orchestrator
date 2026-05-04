@@ -8,18 +8,30 @@ Agentic CLIs are powerful but inconsistent. Same request to two different tools 
 
 ## Install
 
-Clone (or submodule) this repo into your project as `.ai-sdlc/`:
+Clone (or submodule) this repo into your project as `.ai-sdlc/`, then run the installer:
 
 ```sh
 git clone <this-repo> .ai-sdlc
+./.ai-sdlc/install.sh        # auto-detects which CLIs you use and wires them up
 ```
 
-Then install the adapter for your CLI of choice:
+The installer **symlinks** routing files into the right places (`.claude/skills/`, `.cursor/rules/`, `.gemini/GEMINI.md`, `AGENTS.md`). Symlinks mean the framework is the single source of truth — `git pull` inside `.ai-sdlc/` updates routing automatically with no re-install. On systems without symlink support (e.g. Windows without dev mode) the installer falls back to copying tiny stubs that point at `.ai-sdlc/ENTRY.md`; since stubs are stable, the fallback stays reliable.
 
-- **Claude Code** → see `adapters/claude-code/README.md`
-- **Cursor CLI** → see `adapters/cursor-cli/README.md`
-- **Gemini CLI** → see `adapters/gemini-cli/README.md`
-- **Codex** (stretch) → see `adapters/codex/README.md`
+Other useful installer modes:
+
+```sh
+./.ai-sdlc/install.sh --check                    # dry run; show what would happen
+./.ai-sdlc/install.sh claude-code cursor-cli     # explicit adapters instead of auto-detect
+./.ai-sdlc/install.sh --uninstall                # remove installer-placed links/files
+./.ai-sdlc/install.sh --force                    # overwrite existing files at target paths
+```
+
+Manual install instructions per adapter (rarely needed):
+
+- **Claude Code** → `adapters/claude-code/README.md`
+- **Cursor CLI** → `adapters/cursor-cli/README.md`
+- **Gemini CLI** → `adapters/gemini-cli/README.md`
+- **Codex** (stretch) → `adapters/codex/README.md`
 
 ## Use
 

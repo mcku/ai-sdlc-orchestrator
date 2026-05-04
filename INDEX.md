@@ -8,6 +8,7 @@ Machine-readable map of the framework. The agent uses this instead of scanning d
 - [`INDEX.md`](INDEX.md) — this file.
 - [`README.md`](README.md) — human-facing install and usage.
 - [`PRINCIPLES.md`](PRINCIPLES.md) — operating rules that override agent defaults.
+- [`install.sh`](install.sh) — adapter installer (auto-detect, symlink, copy fallback, uninstall).
 
 ## Phases (`phases/`)
 

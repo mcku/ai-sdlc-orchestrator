@@ -7,11 +7,19 @@ Placeholder adapter. v0 ships with routing instructions only; richer integration
 From the project root:
 
 ```sh
-mkdir -p .gemini
-cp .ai-sdlc/adapters/gemini-cli/GEMINI.md .gemini/GEMINI.md
+./.ai-sdlc/install.sh gemini-cli
 ```
 
-(The exact filename and location may differ depending on Gemini CLI version. The intent: place the file where Gemini CLI loads project-level instructions.)
+This symlinks `.gemini/GEMINI.md` → `.ai-sdlc/adapters/gemini-cli/GEMINI.md`.
+
+### Manual fallback (no installer)
+
+```sh
+mkdir -p .gemini
+ln -s ../.ai-sdlc/adapters/gemini-cli/GEMINI.md .gemini/GEMINI.md
+```
+
+The exact filename and location may vary by Gemini CLI version. The intent: place the file where Gemini CLI loads project-level instructions.
 
 ## How it works
 

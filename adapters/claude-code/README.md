@@ -4,23 +4,30 @@ Wires AI-SDLC into Claude Code so the canonical phrase **"Run AI-SDLC."** (and n
 
 ## Install
 
-From the project root (where `.ai-sdlc/` is checked out):
+From the project root:
 
-1. Copy the skill file:
+```sh
+./.ai-sdlc/install.sh claude-code
+```
 
-   ```sh
-   mkdir -p .claude/skills
-   cp .ai-sdlc/adapters/claude-code/skills/sdlc-start.md .claude/skills/
-   ```
+This symlinks:
 
-2. (Optional) Copy the orchestrator subagent:
+- `.claude/skills/sdlc-start.md` → `.ai-sdlc/adapters/claude-code/skills/sdlc-start.md`
+- `.claude/agents/sdlc-orchestrator.md` → `.ai-sdlc/adapters/claude-code/agents/sdlc-orchestrator.md`
 
-   ```sh
-   mkdir -p .claude/agents
-   cp .ai-sdlc/adapters/claude-code/agents/sdlc-orchestrator.md .claude/agents/
-   ```
+Symlinks mean a `git pull` inside `.ai-sdlc/` updates routing without re-running the installer.
 
-3. (Optional) Merge the suggested permission allowlist from `settings.example.json` into `.claude/settings.json` to reduce permission prompts during phase execution.
+(Optional) Merge the suggested permission allowlist from `settings.example.json` into `.claude/settings.json` to reduce permission prompts during phase execution. This is a one-time copy because `settings.json` is project-owned.
+
+### Manual fallback (no installer)
+
+```sh
+mkdir -p .claude/skills .claude/agents
+ln -s ../../.ai-sdlc/adapters/claude-code/skills/sdlc-start.md .claude/skills/sdlc-start.md
+ln -s ../../.ai-sdlc/adapters/claude-code/agents/sdlc-orchestrator.md .claude/agents/sdlc-orchestrator.md
+```
+
+Or `cp` instead of `ln -s` if symlinks aren't available.
 
 ## How it works
 
