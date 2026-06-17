@@ -33,4 +33,5 @@ Execute the plan. One task at a time. Tool use over guessing.
 - All tasks in the plan are done or explicitly deferred (with note).
 - Code compiles / lints / type-checks.
 - `04-development.md` log up to date.
-- Manifest updated with `current_phase: 05-qa`.
+- **Human approval recorded** — `phases.04-development.approval.status: approved` per `playbooks/phase-approval-gate.md`. Do not advance without it.
+- Only then: manifest updated with `phases.04-development.status: done` and `current_phase: 05-qa`.

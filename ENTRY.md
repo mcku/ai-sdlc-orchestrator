@@ -13,6 +13,7 @@ Read `PRINCIPLES.md`. These rules override your defaults for this run:
 - **Ask, don't assume**, especially for cross-module access.
 - **File-first state** — every decision is written to disk before you act on it.
 - **Hard-block on access** — if a module isn't accessible and you need it, stop and ask.
+- **Human approval gate at every phase boundary** — never advance to the next phase until the user has explicitly approved the completed one (recorded in the manifest). Non-negotiable, not configurable.
 
 ## 2.5 Read the project config (if present)
 
@@ -60,7 +61,18 @@ Read `phases/NN-*.md` matching `current_phase` in the manifest. Each phase file 
 - **When to ask the user** — explicit checkpoints
 - **Exit criteria** — what must be true to advance
 
-Write the phase artifact (`sessions/<id>/NN-*.md`), update the manifest, then advance.
+Write the phase artifact (`sessions/<id>/NN-*.md`), update the manifest, then **stop at the approval gate before advancing** (step 5.5).
+
+## 5.5 Phase approval gate — required before every advance
+
+When a phase's artifact is written and its other exit criteria are met, the phase is **eligible to advance but not yet cleared.** Before you change `current_phase`, run `playbooks/phase-approval-gate.md`:
+
+1. Present a concise summary of the completed phase and what the next phase will do.
+2. Ask the user to **approve, request changes, or reject**. Wait for an explicit decision — silence, a tool result, or your own "looks done" judgment is not approval.
+3. Record the decision under `phases.NN.approval` (`status`, `by`, `at`).
+4. Only when `phases.NN.approval.status: approved` is recorded may you set `phases.NN.status: done` and update `current_phase` to the next phase (or `status: done` at phase 08).
+
+This gate applies to **every** boundary, runs **after** all other phase checkpoints (including the phase 02 access block and the phase 05 QA gates), and is **not** configurable via `.ai-sdlc.yaml`. There is no override.
 
 ## 6. On phase 02 (scoping): respect the access hard-block
 

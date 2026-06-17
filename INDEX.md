@@ -18,6 +18,8 @@ Machine-readable map of the framework. The agent uses this instead of scanning d
 - [`00-intake.md`](phases/00-intake.md) — capture and normalize the raw request.
 - [`01-analysis.md`](phases/01-analysis.md) — decompose, surface unknowns, identify modules touched.
 - [`02-scoping.md`](phases/02-scoping.md) — in/out scope; emit access requests; **hard block** on pending asks.
+
+> Every phase boundary also enforces the **human approval gate** (`playbooks/phase-approval-gate.md`): the agent stops after each phase and may not advance until the user explicitly approves. This is non-negotiable and applies to all phases below.
 - [`03-planning.md`](phases/03-planning.md) — design and task breakdown.
 - [`04-development.md`](phases/04-development.md) — implementation; prefers tool use over guessing.
 - [`05-qa.md`](phases/05-qa.md) — test plans, regression, UI testing.
@@ -27,6 +29,7 @@ Machine-readable map of the framework. The agent uses this instead of scanning d
 
 ## Playbooks (`playbooks/`)
 
+- [`phase-approval-gate.md`](playbooks/phase-approval-gate.md) — **mandatory** human approval gate at every phase boundary; no phase advances without it. Not configurable.
 - [`ask-for-access.md`](playbooks/ask-for-access.md) — how to identify, request, and record cross-module access.
 - [`bugfix-triage.md`](playbooks/bugfix-triage.md) — reproduce → root cause → minimal fix → regression.
 - [`coverage-gate.md`](playbooks/coverage-gate.md) — phase 05 gate: ≥ 80% diff coverage on added/changed code.

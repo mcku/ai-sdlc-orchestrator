@@ -34,4 +34,5 @@ Decompose the request, surface unknowns, and identify which parts of the system 
 ## Exit criteria
 
 - `01-analysis.md` written.
-- Manifest updated with `current_phase: 02-scoping`.
+- **Human approval recorded** — `phases.01-analysis.approval.status: approved` per `playbooks/phase-approval-gate.md`. Do not advance without it.
+- Only then: manifest updated with `phases.01-analysis.status: done` and `current_phase: 02-scoping`.

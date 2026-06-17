@@ -139,6 +139,14 @@ gates:
 
 Earlier versions of `playbooks/coverage-gate.md` recommended `diff-cover` (a Python tool) as the cross-language default. That caused `diff-cover` to be invoked in non-Python repos (Go, Rust, etc.), pulling Python in as a transitive requirement. Fixed: the playbook now detects the project language and prefers native diff-coverage tooling. `diff-cover` is only used when Python is already a project dependency. Non-breaking — same gate, same threshold, just a smarter tool selection.
 
+### Phase approval gate (added in 0.4.0)
+
+Every phase now ends with a **mandatory human approval gate**: the agent stops after each phase, summarizes it, and may not advance `current_phase` until the user explicitly approves and that approval is recorded in the manifest under `phases.NN.approval`. See `playbooks/phase-approval-gate.md`.
+
+- **Nothing to install or configure.** The gate is on by default and **cannot** be disabled — there is no `.ai-sdlc.yaml` key for it and no override flag. (The QA-style gates remain configurable; this one is not.)
+- `phases.NN.approval` is a **new optional manifest field**. Existing sessions resume fine: any phase already marked `done` is treated as previously approved (not retro-validated); the gate applies to the next phase boundary onward. This is why the change is **non-breaking** (MINOR bump to 0.4.0).
+- Practically: expect the agent to pause and ask "approve advancing to phase NN?" after each phase instead of rolling straight through.
+
 ### Settings allowlist (Claude Code only)
 
 If you previously merged `adapters/claude-code/settings.example.json` into `.claude/settings.json`, re-diff after pulling to see if new safe permissions were added:
@@ -173,6 +181,7 @@ These will not change without a MAJOR bump:
 - The boot path: `ENTRY.md` → `INDEX.md` → session manifest → `phases/NN-*.md`.
 - The set of phase numbers `00`–`08` and what each phase covers (additions are MINOR; renumbering is MAJOR).
 - The hard-block on `access_requests` with `status: pending` in phase 02.
+- The human approval gate at every phase boundary (added 0.4.0): no phase advances without an explicit, recorded human approval. Non-configurable; removing or weakening it would be a MAJOR change.
 - The update rules in `self-improvement/update-rules.md`: new file = auto on user yes, in-place edit = per-edit approval, deletion = forbidden.
 - The minimum required manifest fields (`session_id`, `framework_version`, `created_at`, `current_phase`, `status`, `phases.*`).
 - The principle: agent reads framework files at runtime; routing files in adapter destinations are stable, tiny stubs.

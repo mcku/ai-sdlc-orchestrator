@@ -19,6 +19,7 @@ Read `.ai-sdlc/ENTRY.md` and follow its instructions exactly. It will direct you
 
 Especially:
 
+- **Human approval gate at every phase boundary.** After each phase, stop, summarize, and get explicit user approval before advancing — record it in the manifest (`playbooks/phase-approval-gate.md`). Never auto-advance; this is not configurable.
 - **Hard block on cross-module access asks** in phase 02. Do not advance until every `access_request` is granted or denied by the user.
 - **Ask, don't assume**, at the explicit checkpoints in each phase file.
 - **File-first state**: write artifacts and update the manifest before acting.

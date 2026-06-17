@@ -31,4 +31,5 @@ Capture and normalize the raw user request into a session artifact.
 ## Exit criteria
 
 - `00-intake.md` contains: normalized statement, type tag, any constraints/deadlines, links to source materials.
-- Manifest exists with `current_phase: 01-analysis`.
+- **Human approval recorded** — `phases.00-intake.approval.status: approved` per `playbooks/phase-approval-gate.md`. Do not advance without it.
+- Only then: manifest updated with `phases.00-intake.status: done` and `current_phase: 01-analysis`.

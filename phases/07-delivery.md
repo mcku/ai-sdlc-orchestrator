@@ -32,4 +32,5 @@ Package the change for handoff. Commits, PR, and any docs the user needs.
 
 - Delivery artifacts exist where the user expects them.
 - `07-delivery.md` written.
-- Manifest updated with `current_phase: 08-retrospective`.
+- **Human approval recorded** — `phases.07-delivery.approval.status: approved` per `playbooks/phase-approval-gate.md`. (This is the phase-boundary approval; it is in addition to the per-action confirmation required before any push/PR above.) Do not advance without it.
+- Only then: manifest updated with `phases.07-delivery.status: done` and `current_phase: 08-retrospective`.

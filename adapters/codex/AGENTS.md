@@ -4,7 +4,7 @@ When the user's message includes the canonical phrase `Run AI-SDLC.` or any natu
 
 1. Read `.ai-sdlc/ENTRY.md` and follow it exactly.
 2. Do not improvise your own SDLC.
-3. Honor the rules in `.ai-sdlc/PRINCIPLES.md` — especially the hard-block on cross-module access in phase 02, and the prohibition on deleting framework content.
+3. Honor the rules in `.ai-sdlc/PRINCIPLES.md` — especially the **human approval gate at every phase boundary** (never advance without the user's explicit approval, recorded in the manifest), the hard-block on cross-module access in phase 02, and the prohibition on deleting framework content.
 4. Prefer tool use over guessing. See `.ai-sdlc/tools/well-known-tools.md`.
 
 If `.ai-sdlc/ENTRY.md` is missing, tell the user the framework isn't installed and stop.

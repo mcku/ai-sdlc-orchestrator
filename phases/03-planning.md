@@ -31,5 +31,6 @@ Produce a concrete design and task breakdown.
 
 ## Exit criteria
 
-- `03-planning.md` written and acknowledged by the user.
-- Manifest updated with `current_phase: 04-development`.
+- `03-planning.md` written.
+- **Human approval recorded** — `phases.03-planning.approval.status: approved` per `playbooks/phase-approval-gate.md`. The plan must be explicitly approved before any code is written; do not advance without it.
+- Only then: manifest updated with `phases.03-planning.status: done` and `current_phase: 04-development`.

@@ -36,5 +36,6 @@ You may **not** advance to phase 03 while any `access_requests` entry has `statu
 ## Exit criteria
 
 - `02-scoping.md` written.
-- All `access_requests` are `granted` or `denied` (none `pending`).
-- Manifest updated with `current_phase: 03-planning`.
+- All `access_requests` are `granted` or `denied` (none `pending`). *(This access hard-block is separate from and runs before the approval gate below.)*
+- **Human approval recorded** — `phases.02-scoping.approval.status: approved` per `playbooks/phase-approval-gate.md`. Do not advance without it.
+- Only then: manifest updated with `phases.02-scoping.status: done` and `current_phase: 03-planning`.

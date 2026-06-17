@@ -47,6 +47,8 @@ The adapter routes to `ENTRY.md`, which boots the agent through the framework: l
 
 Intake → analysis → scoping (with hard-block on cross-module access) → planning → development → QA → security → delivery → retrospective. The retrospective proposes updates to the framework itself, gated by `self-improvement/update-rules.md`.
 
+**Every phase ends with a human approval gate.** The agent stops after each phase, summarizes what it did, and waits for you to approve before moving on — it never advances on its own. This is non-negotiable and cannot be disabled via config. See [`playbooks/phase-approval-gate.md`](playbooks/phase-approval-gate.md).
+
 ## Updating
 
 Already have an older `.ai-sdlc/` checked out in your project? See [`UPDATING.md`](UPDATING.md). For symlink-based installs, the update is just `cd .ai-sdlc && git pull`.

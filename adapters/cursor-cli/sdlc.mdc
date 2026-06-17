@@ -16,7 +16,7 @@ When the user's message contains any of:
 
 1. Read `.ai-sdlc/ENTRY.md` and follow its instructions exactly.
 2. Do **not** improvise an SDLC of your own. The framework defines phases, artifacts, decision points, access checks, and update rules.
-3. Honor the principles in `.ai-sdlc/PRINCIPLES.md` — especially the hard-block on cross-module access in phase 02 and the prohibition on deleting framework content.
+3. Honor the principles in `.ai-sdlc/PRINCIPLES.md` — especially the **human approval gate at every phase boundary** (never advance without the user's explicit approval, recorded in the manifest), the hard-block on cross-module access in phase 02, and the prohibition on deleting framework content.
 4. Prefer tool use over guessing. See `.ai-sdlc/tools/well-known-tools.md` for the catalog.
 5. Write phase artifacts to `.ai-sdlc/sessions/<id>/` and update `manifest.yaml` as the source of truth.
 

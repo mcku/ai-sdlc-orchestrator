@@ -24,6 +24,12 @@ Every non-trivial decision, scope item, access request, and artifact is written 
 
 Phase 02 enumerates every module/repo/system the work might touch. Anything not currently accessible becomes an `access_request` in the manifest with `status: pending`. **The agent may not advance past phase 02 while any request is pending.** User explicitly grants or denies; both are recorded.
 
+## 4a. Human approval gate at every phase boundary
+
+No phase may advance to the next without explicit human approval of the completed phase. After finishing a phase's artifact and meeting its other exit criteria, the agent **stops**, presents a summary, and asks the user to approve, request changes, or reject. Only an explicit human "approved" — recorded in the manifest under `phases.NN.approval` — permits updating `current_phase`. See `playbooks/phase-approval-gate.md`.
+
+This gate is **non-negotiable and not configurable.** Unlike the QA gates in `.ai-sdlc.yaml`, it can never be disabled or set to `manual`, and there is no override flag. Meeting a phase's exit criteria makes it *eligible* for approval; it does not grant approval. Silence, a tool result, or the agent's own judgment that a phase "looks done" never counts as approval.
+
 ## 5. Tool use over guessing
 
 When an MCP, CLI, or other tool can answer a question authoritatively (file presence, schema, API surface, current docs), use it. Do not infer from training data. See `tools/well-known-tools.md` for the catalog and "when to reach for it" notes.

@@ -1,5 +1,5 @@
 session_id: 2026-05-04-example-checkout-bug
-framework_version: 0.2.0
+framework_version: 0.4.0
 created_by: claude-code
 created_at: 2026-05-04T09:00:00Z
 request_summary: >
@@ -15,17 +15,33 @@ phases:
     status: done
     artifact: 00-intake.md
     completed_at: 2026-05-04T09:05:00Z
+    approval:                          # required before advancing — see playbooks/phase-approval-gate.md
+      status: approved                 # pending | approved | changes-requested | rejected
+      by: user
+      at: 2026-05-04T09:06:00Z
+      notes: "intake looks right, go ahead"
   01-analysis:
     status: done
     artifact: 01-analysis.md
     completed_at: 2026-05-04T09:25:00Z
+    approval:
+      status: approved
+      by: user
+      at: 2026-05-04T09:27:00Z
   02-scoping:
     status: done
     artifact: 02-scoping.md
     completed_at: 2026-05-04T09:50:00Z
+    approval:
+      status: approved
+      by: user
+      at: 2026-05-04T09:52:00Z
+      notes: "scope confirmed; access granted below"
   03-planning:
-    status: active
+    status: active                     # awaiting human approval before advancing to 04-development
     artifact: 03-planning.md
+    approval:
+      status: pending
   04-development:
     status: pending
   05-qa:

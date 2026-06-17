@@ -14,6 +14,11 @@
 #   enabled: manual   # gate does NOT auto-run; the agent never invokes it on its own,
 #                     # but the user may explicitly request it ("run the coverage gate")
 #                     # and the agent will run it on demand.
+#
+# NOTE: the per-phase human approval gate (playbooks/phase-approval-gate.md) is NOT
+# listed here and is NOT configurable. The agent must obtain explicit human approval
+# at every phase boundary before advancing — it cannot be disabled or set to `manual`,
+# and there is no override. Only the QA-style gates below are configurable.
 
 gates:
   coverage:

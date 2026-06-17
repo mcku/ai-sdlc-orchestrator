@@ -45,4 +45,5 @@ Review the change for common security failure modes. Scope to what changed; don'
 
 - Checklist applied; findings resolved or explicitly deferred.
 - `06-security.md` written.
-- Manifest updated with `current_phase: 07-delivery`.
+- **Human approval recorded** — `phases.06-security.approval.status: approved` per `playbooks/phase-approval-gate.md`. Do not advance without it.
+- Only then: manifest updated with `phases.06-security.status: done` and `current_phase: 07-delivery`.

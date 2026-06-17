@@ -50,4 +50,5 @@ The user always sees the classification and may override it (rare).
 - `08-retrospective.md` written.
 - Each proposal in `self-improvement/proposed/` has a clear status (`pending`, `approved`, `rejected`).
 - Approved proposals applied per the update rules.
-- Manifest updated with `status: done`.
+- **Human approval recorded** — `phases.08-retrospective.approval.status: approved` per `playbooks/phase-approval-gate.md`. This is the final gate: the user approves closing the session before it is marked done. Do not close without it.
+- Only then: manifest updated with `phases.08-retrospective.status: done` and `status: done`.
