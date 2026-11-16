@@ -4,7 +4,7 @@ A portable, markdown-first framework for running an AI-assisted software develop
 
 ## Why this exists
 
-Agentic CLIs are powerful but inconsistent and have no brakes. Same request to two different tools produces two different shapes of work. This framework defines the shape — phases, artifacts, decision points, access checkpoints — in plain Markdown, and uses thin per-vendor adapters for ergonomics. This framework also ensures alignment with the original intent, by implementing a real-world Software Development Life Cycle workflow, with a human in the loop for the essential touches. The agent does the work; the framework keeps it on rails, all aligned. 
+Agentic CLIs are powerful but inconsistent and have no brakes. Same request to two different tools produces two different shapes of work. This framework defines the shape — phases, artifacts, decision points, access checkpoints — in plain Markdown, and uses thin per-vendor adapters for ergonomics. This framework also ensures alignment with the original intent, by implementing a real-world Software Development Life Cycle workflow, with a human in the loop for the essential touches at the right points, before everything is implemented. The agent does the work; the framework keeps it on rails, all aligned. 
 
 
 ## Install
